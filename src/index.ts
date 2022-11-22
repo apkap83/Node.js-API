@@ -6,6 +6,6 @@ import PostController from '@/resources/post/post.controller';
 
 validateEnv();
 
-const app = new App([new PostController()], Number(process.env.port));
+const app = new App([new PostController()], Number(4444));
 
 app.listen();

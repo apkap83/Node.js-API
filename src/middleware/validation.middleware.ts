@@ -21,9 +21,8 @@ function validationMiddleware(schema: Joi.Schema): RequestHandler {
 
             req.body = value;
             next();
-        } catch (err: unknown) {
+        } catch (err: any) {
             const errors: string[] = [];
-            //@ts-ignore
             err.details.forEach((error: Joi.ValidationErrorItem) => {
                 errors.push(error.message);
             });
