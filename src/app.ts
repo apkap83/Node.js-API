@@ -8,6 +8,7 @@ import Controller from '@/utils/interfaces/controller.interface';
 import ErrorMiddleware from '@/middleware/error.middleware';
 
 class App {
+    private AppURLPath = '/api';
     public express: Application;
     public port: number;
 
@@ -38,7 +39,7 @@ class App {
 
     private initialiseControllers(controllers: Controller[]): void {
         controllers.forEach((controller: Controller) => {
-            this.express.use('/api', controller.router);
+            this.express.use(this.AppURLPath, controller.router);
         });
     }
 

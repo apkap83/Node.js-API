@@ -6,7 +6,7 @@ function errorMiddleware(
     req: Request,
     res: Response,
     next: NextFunction
-): void {
+) {
     const status = error.status || 500;
     const message = error.message || 'Something went wrong';
 
