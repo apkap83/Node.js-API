@@ -23,8 +23,8 @@ class UserService {
 
             const accessToken = token.createToken(user);
             return accessToken;
-        } catch (error) {
-            throw new Error('Unable to create user');
+        } catch (error: any) {
+            throw new Error(error);
         }
     }
 

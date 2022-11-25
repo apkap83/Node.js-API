@@ -1,0 +1,21 @@
+POST http://localhost:4444/api/users/register
+Content-Type: application/json
+
+{
+    "name": "Tolis",
+    "email": "ap.kapetanios@wind.gr",
+    "password": "password123"
+}
+
+###
+POST http://localhost:4444/api/users/login
+Content-Type: application/json
+
+{
+    "email": "ap.kapetanios@wind.gr",
+    "password": "password123"
+}
+
+###
+GET http://localhost:4444/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzODA3MTJhY2VhYjBjZTBkN2M0ODBiOCIsImlhdCI6MTY2OTM5NDIyMywiZXhwIjoxNjY5NDgwNjIzfQ.qmo8ZRdoSXZh84qSO39uKx3HY2wL7LYYQS0x7yJOexQ
