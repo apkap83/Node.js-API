@@ -10,6 +10,7 @@
         "build": "tsc",
         "postinstall": "npm run build"
     },
+    "type": "commonjs",
     "keywords": [],
     "author": "",
     "license": "ISC",

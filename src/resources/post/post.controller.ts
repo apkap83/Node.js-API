@@ -8,6 +8,7 @@ import PostService from '@/resources/post/post.service';
 class PostController implements Controller {
     public path = '/posts';
     public router = Router();
+
     private PostService = new PostService();
     constructor() {
         this.initialiseRoutes();
