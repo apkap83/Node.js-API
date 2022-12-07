@@ -1,1 +1,1 @@
-module.exports = { presets: ['@babel/preset-env'] };
+module.eqxports = { presets: ['@babel/preset-env'] };
