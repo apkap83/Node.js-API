@@ -1,7 +1,6 @@
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import User from '@/resources/user/user.interface';
-import { string } from 'joi';
 
 const UserSchema = new Schema(
     {
@@ -22,6 +21,13 @@ const UserSchema = new Schema(
             type: String,
             required: true,
         },
+        refreshTokens: [
+            {
+                type: String,
+                required: true,
+                unique: true,
+            },
+        ],
     },
     {
         timestamps: true,
@@ -41,6 +47,16 @@ UserSchema.methods.isValidPassword = async function (
     password: string
 ): Promise<Error | boolean> {
     return await bcrypt.compare(password, this.password);
+};
+
+UserSchema.methods.pushRefreshToken = async function (
+    refreshToken: string
+): Promise<Error | string> {
+    if (!this.refreshTokens.includes(refreshToken)) {
+        await this.refreshTokens.push(refreshToken);
+        this.save();
+    }
+    return refreshToken;
 };
 
 export default model<User>('User', UserSchema);

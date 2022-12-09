@@ -1,5 +1,10 @@
 import UserModel from '@/resources/user/user.model';
 import token from '@/utils/token';
+import {
+    Token,
+    AccessTokenAndRefreshToken,
+} from '@/utils/interfaces/token.interface';
+import jwt from 'jsonwebtoken';
 
 class UserService {
     private user = UserModel;
@@ -12,7 +17,7 @@ class UserService {
         email: string,
         password: string,
         role: string
-    ): Promise<string | Error> {
+    ): Promise<AccessTokenAndRefreshToken | Error> {
         try {
             const user = await this.user.create({
                 name,
@@ -21,8 +26,15 @@ class UserService {
                 role,
             });
 
-            const accessToken = token.createToken(user);
-            return accessToken;
+            const accessToken = token.createAccessToken(user);
+            const refreshToken = token.createRefreshToken(user);
+
+            await user.pushRefreshToken(refreshToken);
+
+            return {
+                accessToken,
+                refreshToken,
+            };
         } catch (error: any) {
             throw new Error(error);
         }
@@ -34,7 +46,7 @@ class UserService {
     public async login(
         email: string,
         password: string
-    ): Promise<string | Error> {
+    ): Promise<AccessTokenAndRefreshToken | Error> {
         try {
             const user = await this.user.findOne({ email });
 
@@ -43,12 +55,42 @@ class UserService {
             }
 
             if (await user.isValidPassword(password)) {
-                return token.createToken(user);
+                const accessToken = token.createAccessToken(user);
+                const refreshToken = token.createRefreshToken(user);
+
+                await user.pushRefreshToken(refreshToken);
+
+                return {
+                    accessToken,
+                    refreshToken,
+                };
             } else {
                 throw new Error('Wrong credentials given');
             }
         } catch (error) {
             throw new Error('Unable to login user');
+        }
+    }
+
+    public async requestNewAccessToken(
+        refreshToken: string
+    ): Promise<string | Error> {
+        try {
+            let accessToken = '';
+            const payload = await token.verifyRefreshToken(refreshToken);
+            if (!(payload instanceof jwt.JsonWebTokenError)) {
+                const user = await this.user.findOne({
+                    _id: payload.id,
+                    refreshTokens: refreshToken,
+                });
+
+                if (user) {
+                    accessToken = token.createAccessToken(user);
+                }
+            }
+            return accessToken;
+        } catch (error) {
+            throw new Error('Invalid refresh token provided');
         }
     }
 }

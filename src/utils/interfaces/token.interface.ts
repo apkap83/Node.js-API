@@ -5,4 +5,9 @@ interface Token extends Object {
     expiresIn: number;
 }
 
-export default Token;
+interface AccessTokenAndRefreshToken {
+    accessToken: string;
+    refreshToken: string;
+}
+
+export { Token, AccessTokenAndRefreshToken };

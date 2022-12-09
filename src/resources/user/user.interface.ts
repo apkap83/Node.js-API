@@ -5,5 +5,7 @@ export default interface User extends Document {
     name: string;
     password: string;
     role: string;
+    refreshTokens: string[];
     isValidPassword(password: string): Promise<Error | boolean>;
+    pushRefreshToken(refreshToken: string): Promise<Error | string>;
 }

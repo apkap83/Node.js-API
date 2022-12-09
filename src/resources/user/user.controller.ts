@@ -28,7 +28,13 @@ class UserController implements Controller {
             this.login
         );
 
-        this.router.get(`${this.path}`, authenticated, this.getUser);
+        this.router.post(
+            `${this.path}/refresh_access_token`,
+            validationMiddleware(validate.refreshAccessToken),
+            this.refreshAccessToken
+        );
+
+        this.router.get(`${this.path}/me`, authenticated, this.getUser);
     }
 
     private register = async (
@@ -39,14 +45,14 @@ class UserController implements Controller {
         try {
             const { name, email, password } = req.body;
 
-            const token = await this.UserService.register(
+            const bothTokens = await this.UserService.register(
                 name,
                 email,
                 password,
                 'user'
             );
 
-            res.status(201).json({ token });
+            res.status(201).json(bothTokens);
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
@@ -60,9 +66,27 @@ class UserController implements Controller {
         try {
             const { email, password } = req.body;
 
-            const token = await this.UserService.login(email, password);
+            const bothTokens = await this.UserService.login(email, password);
 
-            res.status(200).json({ token });
+            res.status(200).json(bothTokens);
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private refreshAccessToken = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { refreshToken } = req.body;
+
+            const accessToken = await this.UserService.requestNewAccessToken(
+                refreshToken
+            );
+
+            res.status(200).json({ accessToken });
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }

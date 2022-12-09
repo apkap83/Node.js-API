@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { verifyToken } from '@/utils/token';
+import { verifyAccessToken } from '@/utils/token';
 import UserModel from '@/resources/user/user.model';
-import Token from '@/utils/interfaces/token.interface';
+import { Token } from '@/utils/interfaces/token.interface';
 import HttpException from '@/utils/exceptions/http.exception';
 import jwt from 'jsonwebtoken';
 
@@ -19,7 +19,7 @@ async function authenticatedMiddleware(
     const accessToken = bearer.split('Bearer ')[1].trim();
 
     try {
-        const payload: Token | jwt.JsonWebTokenError = await verifyToken(
+        const payload: Token | jwt.JsonWebTokenError = await verifyAccessToken(
             accessToken
         );
 
