@@ -86,6 +86,8 @@ class UserService {
 
                 if (user) {
                     accessToken = token.createAccessToken(user);
+                } else {
+                    throw new Error('Invalid refresh token provided 2');
                 }
             }
             return accessToken;

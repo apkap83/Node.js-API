@@ -13,6 +13,7 @@ function validateEnv(): void {
         JWT_REFRESH_TOKEN_SECRET: str(),
         JWT_ACCESS_TOKEN_TIMEOUT: str(),
         JWT_REFRESH_TOKEN_TIMEOUT: str(),
+        JWT_NUMBER_OF_REFRESH_TOKENS_SAVED: str(),
     });
 }
 

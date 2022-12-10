@@ -98,6 +98,14 @@ describe('Authentication Tests', () => {
         expect(response.statusCode).toBe(200);
     });
 
+    test('Validate Faulty Access Token: ' + `${prefixURL}/me`, async () => {
+        const response = await request(app)
+            .get(`${prefixURL}/me`)
+            .set({ Authorization: `Bearer ${accessToken}ABCD` });
+
+        expect(response.statusCode).toBe(401);
+    });
+
     test(
         'Get Successfully Access Token with a Refresh Token: ' +
             `${prefixURL}/refresh_access_token`,
@@ -127,7 +135,39 @@ describe('Authentication Tests', () => {
         'Deny Access Token refresh action with a faulty Refresh Token: ' +
             `${prefixURL}/refresh_access_token`,
         async () => {
-            refreshToken = refreshToken + 'ABC';
+            refreshToken = `${refreshToken}ABCD`;
+            const response = await request(app)
+                .post(`${prefixURL}/refresh_access_token`)
+                .set({ 'Content-Type': 'application/json' })
+                .send({
+                    refreshToken,
+                });
+
+            expect(response.body.message).toEqual(
+                'Invalid refresh token provided'
+            );
+            expect(response.statusCode).toBe(400);
+        }
+    );
+
+    test(
+        'Deny Access Token refresh action because of an already deleted Refresh Token: ' +
+            `${prefixURL}/refresh_access_token`,
+        async () => {
+            const responseForUserDetails = await request(app)
+                .get(`${prefixURL}/me`)
+                .set({ Authorization: `Bearer ${accessToken}` });
+
+            // Remove the specific access token from DB
+            const check = await user.updateOne(
+                { _id: responseForUserDetails.body.user._id },
+                {
+                    $pullAll: {
+                        refreshTokens: [refreshToken],
+                    },
+                }
+            );
+
             const response = await request(app)
                 .post(`${prefixURL}/refresh_access_token`)
                 .set({ 'Content-Type': 'application/json' })
