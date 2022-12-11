@@ -8,7 +8,8 @@
         "dev": "ENVIRONMENT=test tsc-watch --onSuccess \"node ./dist/index.js\"",
         "build": "tsc",
         "postinstall": "npm run build",
-        "test": "ENVIRONMENT=test jest --watch --runInBand --detectOpenHandles --coverage=false"
+        "test": "ENVIRONMENT=test jest --watch --runInBand --detectOpenHandles --coverage=false",
+        "clear_jest_cache": "jest --clearCache"
     },
     "type": "commonjs",
     "keywords": [],
@@ -26,6 +27,7 @@
         "jsonwebtoken": "^8.5.1",
         "module-alias": "^2.2.2",
         "mongoose": "^6.0.12",
+        "mongoose-unique-array": "^0.4.2",
         "morgan": "^1.10.0"
     },
     "devDependencies": {

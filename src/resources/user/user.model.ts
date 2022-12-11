@@ -24,7 +24,6 @@ const UserSchema = new Schema(
         refreshTokens: [
             {
                 type: String,
-                default: 'None',
             },
         ],
     },
@@ -57,13 +56,14 @@ UserSchema.methods.pushRefreshToken = async function (
     if (numberOfRefreshTokensSaved != undefined) {
         if (!this.refreshTokens.includes(refreshToken)) {
             await this.refreshTokens.push(refreshToken);
+            this.save();
         }
 
         if (this.refreshTokens.length > numberOfRefreshTokensSaved) {
             // Remove first element
             await this.refreshTokens.shift();
+            this.save();
         }
-        this.save();
     }
     return refreshToken;
 };

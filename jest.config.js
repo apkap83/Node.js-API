@@ -6,6 +6,7 @@ const config = {
     moduleNameMapper: aliases.jest,
     preset: 'ts-jest',
     testEnvironment: 'node',
+    testPathIgnorePatterns: ['.d.ts', '.js'],
 };
 
 module.exports = config;
