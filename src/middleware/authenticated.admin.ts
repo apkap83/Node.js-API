@@ -4,8 +4,9 @@ import UserModel from '@/resources/user/user.model';
 import { Token } from '@/utils/interfaces/token.interface';
 import HttpException from '@/utils/exceptions/http.exception';
 import jwt from 'jsonwebtoken';
+import UserRoles from '@/utils/UserRoles';
 
-async function authenticatedMiddleware(
+async function authenticatedAdminMiddleware(
     req: Request,
     res: Response,
     next: NextFunction
@@ -25,6 +26,9 @@ async function authenticatedMiddleware(
 
         if (payload instanceof jwt.JsonWebTokenError) {
             return next(new HttpException(401, 'Unauthorized'));
+        }
+        if (payload.role !== UserRoles.Admin) {
+            return next(new HttpException(403, 'Forbidden = Not Admin!'));
         }
 
         const user = await UserModel.findById(payload.id)
@@ -47,4 +51,4 @@ async function authenticatedMiddleware(
     }
 }
 
-export default authenticatedMiddleware;
+export default authenticatedAdminMiddleware;

@@ -1,21 +1,39 @@
-POST http://localhost:4444/api/users/register
-Content-Type: application/json
-
-{
-    "name": "Tolis",
-    "email": "ap.kapetanios@wind.gr",
-    "password": "password123"
-}
+@adminName =Apostolos Kapetanios
+@adminEmail=ap.kapetanios@wind.gr
+@adminPassword=MyAdminPassword123
 
 ###
 POST http://localhost:4444/api/users/login
 Content-Type: application/json
 
 {
-    "email": "ap.kapetanios@wind.gr",
-    "password": "password123"
+    "email": "{{adminEmail}}",
+    "password": "{{adminPassword}}"
 }
 
 ###
-GET http://localhost:4444/api/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzODA3MTJhY2VhYjBjZTBkN2M0ODBiOCIsImlhdCI6MTY2OTM5NDIyMywiZXhwIjoxNjY5NDgwNjIzfQ.qmo8ZRdoSXZh84qSO39uKx3HY2wL7LYYQS0x7yJOexQ
+POST http://localhost:4444/api/users/register
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzOTVhYjcyMGE5ODhjZGY0YjBlN2EwOCIsIm5hbWUiOiJBcG9zdG9sb3MgS2FwZXRhbmlvcyIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTY3MDc1MzEzOSwiZXhwIjoxNjcwNzU2NzM5fQ.FnTDTvOuDExbRfXhsolbN_x7lFCKJ2odAa_EEq3--yA
+
+{
+    "name": "Michalis Alpos",
+    "email": "m.alpos@wind.gr",
+    "password": "password123adasd"
+}
+
+
+
+
+###
+GET http://localhost:4444/api/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzOTU3NTk0YzdhOTA3YmVjZWE3OGYzOSIsIm5hbWUiOiJUb2xpcyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjcwNzQ0MTIzLCJleHAiOjE2NzA3NDc3MjN9.AZOq8MP8cjFhbqouRcJ27VwRi_IIyyJnKHCWsJChqKg
+
+###
+POST http://localhost:4444/api/posts
+Content-Type: application/json
+
+{
+    "title": "My Title",
+    "body": "My Body"
+}

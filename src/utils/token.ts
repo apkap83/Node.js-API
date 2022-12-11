@@ -4,7 +4,7 @@ import { Token } from '@/utils/interfaces/token.interface';
 
 export const createAccessToken = (user: User): string => {
     return jwt.sign(
-        { id: user._id },
+        { id: user._id, name: user.name, role: user.role },
         process.env.JWT_ACCESS_TOKEN_SECRET as jwt.Secret,
         {
             expiresIn: process.env.JWT_ACCESS_TOKEN_TIMEOUT,

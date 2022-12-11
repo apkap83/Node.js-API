@@ -2,7 +2,9 @@ import { Schema } from 'mongoose';
 
 interface Token extends Object {
     id: Schema.Types.ObjectId;
-    expiresIn: number;
+    name: string;
+    role: string;
+    exp: number;
 }
 
 interface AccessTokenAndRefreshToken {

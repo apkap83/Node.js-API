@@ -5,6 +5,7 @@ import {
     AccessTokenAndRefreshToken,
 } from '@/utils/interfaces/token.interface';
 import jwt from 'jsonwebtoken';
+import { UserResponse } from './user.interface';
 
 class UserService {
     private user = UserModel;
@@ -17,7 +18,7 @@ class UserService {
         email: string,
         password: string,
         role: string
-    ): Promise<AccessTokenAndRefreshToken | Error> {
+    ): Promise<UserResponse | Error> {
         try {
             const user = await this.user.create({
                 name,
@@ -25,16 +26,15 @@ class UserService {
                 password,
                 role,
             });
-
-            const accessToken = token.createAccessToken(user);
-            const refreshToken = token.createRefreshToken(user);
-
-            await user.pushRefreshToken(refreshToken);
-
-            return {
-                accessToken,
-                refreshToken,
-            };
+            if (user) {
+                return {
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                };
+            } else {
+                throw new Error('An error occured during user registration');
+            }
         } catch (error: any) {
             throw new Error(error);
         }
@@ -51,9 +51,8 @@ class UserService {
             const user = await this.user.findOne({ email });
 
             if (!user) {
-                throw new Error('Unable to find user with that Email address');
+                throw new Error('Invalid User Name or Password');
             }
-
             if (await user.isValidPassword(password)) {
                 const accessToken = token.createAccessToken(user);
                 const refreshToken = token.createRefreshToken(user);
@@ -65,10 +64,10 @@ class UserService {
                     refreshToken,
                 };
             } else {
-                throw new Error('Wrong credentials given');
+                throw new Error('Invalid User Name or Password');
             }
-        } catch (error) {
-            throw new Error('Unable to login user');
+        } catch (error: any) {
+            throw new Error(error);
         }
     }
 

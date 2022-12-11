@@ -9,3 +9,9 @@ export default interface User extends Document {
     isValidPassword(password: string): Promise<Error | boolean>;
     pushRefreshToken(refreshToken: string): Promise<Error | string>;
 }
+
+export interface UserResponse {
+    name: string;
+    email: string;
+    role: string;
+}
