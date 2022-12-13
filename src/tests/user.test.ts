@@ -4,6 +4,7 @@ import UserModel from '@/resources/user/user.model';
 import App from '../app';
 import UserController from '@/resources/user/user.controller';
 import UserRoles from '@/utils/UserRoles';
+import mongoose from 'mongoose';
 
 import dotenv from 'dotenv';
 import path from 'path';
@@ -17,19 +18,19 @@ dotenv.config({
 });
 
 const prefixURL = '/api/users';
-const testName = 'Nikos Karetatos';
-const testEmail = 'n.karetatos@wind.gr';
-const testPassword = 'MyPassword123';
-
 const adminName = 'Apostolos Kapetanios';
 const adminEmail = 'ap.kapetanios@wind.gr';
 const adminPassword = 'MyAdminPassword123';
 
-let simpleUserRefreshToken = '';
-let simpleUserAccessToken = '';
+const testName = 'Nikos Karetatos';
+const testEmail = 'n.karetatos@wind.gr';
+const testPassword = 'MyPassword123';
 
 let adminRefreshToken = '';
 let adminAccessToken = '';
+
+let simpleUserRefreshToken = '';
+let simpleUserAccessToken = '';
 
 const user = UserModel;
 
@@ -49,6 +50,9 @@ describe('User Tests', () => {
             role: UserRoles.Admin,
         });
     });
+
+    // Close open db connection
+    afterAll(() => mongoose.disconnect());
 
     test(
         'Not successful login attempt 1: (no creds): ' + `${prefixURL}/login`,
@@ -123,6 +127,23 @@ describe('User Tests', () => {
                     name: 'Whatever Name 1',
                     email: 'whateveremail1@wind.gr',
                     password: 'whateverpassword1',
+                });
+            expect(response.statusCode).toBe(201);
+        }
+    );
+
+    test(
+        'Registration of a new Admin User (running this as an admin) ' +
+            `${prefixURL}/register_admin_user`,
+        async () => {
+            const response = await request(app)
+                .post(`${prefixURL}/register_admin_user`)
+                .set({ 'Content-Type': 'application/json' })
+                .set({ Authorization: `Bearer ${adminAccessToken}` })
+                .send({
+                    name: 'New Admin Name',
+                    email: 'NewAdminEmail@wind.gr',
+                    password: 'NewAdminPassword123',
                 });
             expect(response.statusCode).toBe(201);
         }
@@ -249,23 +270,6 @@ describe('User Tests', () => {
                 'Invalid refresh token provided'
             );
             expect(response.statusCode).toBe(400);
-        }
-    );
-
-    test(
-        'Registration of a new Admin User (running this as an admin) ' +
-            `${prefixURL}/register_admin_user`,
-        async () => {
-            const response = await request(app)
-                .post(`${prefixURL}/register_admin_user`)
-                .set({ 'Content-Type': 'application/json' })
-                .set({ Authorization: `Bearer ${adminAccessToken}` })
-                .send({
-                    name: 'New Admin Name',
-                    email: 'NewAdminEmail@wind.gr',
-                    password: 'NewAdminPassword123',
-                });
-            expect(response.statusCode).toBe(201);
         }
     );
 });

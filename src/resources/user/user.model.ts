@@ -49,23 +49,21 @@ UserSchema.methods.isValidPassword = async function (
 
 UserSchema.methods.pushRefreshToken = async function (
     refreshToken: string
-): Promise<Error | string> {
+): Promise<void> {
     const numberOfRefreshTokensSaved =
         process.env.JWT_NUMBER_OF_REFRESH_TOKENS_SAVED;
 
     if (numberOfRefreshTokensSaved != undefined) {
         if (!this.refreshTokens.includes(refreshToken)) {
             await this.refreshTokens.push(refreshToken);
-            this.save();
         }
 
+        // Remove first element in order to keep only the last X refresh tokens
         if (this.refreshTokens.length > numberOfRefreshTokensSaved) {
-            // Remove first element
             await this.refreshTokens.shift();
-            this.save();
         }
+        this.save();
     }
-    return refreshToken;
 };
 
 export default model<User>('User', UserSchema);

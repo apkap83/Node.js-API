@@ -1,6 +1,6 @@
 @adminName =Apostolos Kapetanios
-@adminEmail=ap.kapetanios@wind.gr
-@adminPassword=MyAdminPassword123
+@adminEmail=n.karetatos@wind.gr
+@adminPassword=MyPassword123
 
 ###
 POST http://localhost:4444/api/users/login
@@ -9,6 +9,19 @@ Content-Type: application/json
 {
     "email": "{{adminEmail}}",
     "password": "{{adminPassword}}"
+}
+
+###
+GET http://localhost:4444/api/users/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzOTgwOTQ3ZjhkYjc5YWIwOWQwMjJhZiIsIm5hbWUiOiJOaWtvcyBLYXJldGF0b3MiLCJyb2xlIjoiU2ltcGxlX1VzZXIiLCJpYXQiOjE2NzA5MDg3ODMsImV4cCI6MTY3MDkwODc5OH0.XpOI4GHsKsTvISodXk7cKUhv0ZbsFejV6K_vmaEUHtw
+
+###
+POST http://localhost:4444/api/users/refresh_access_token
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzOTgwOTQ3ZjhkYjc5YWIwOWQwMjJhZiIsImlhdCI6MTY3MDkwODkxMiwiZXhwIjoxNjcwOTA4OTcyfQ.2jY0iUiId4BSENehbTSP88f0uIqoB-gYQmVNk4tDTHo"
 }
 
 ###

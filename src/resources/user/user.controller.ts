@@ -66,17 +66,6 @@ class UserController implements Controller {
         }
     };
 
-    private getAdmin = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<Response | void> => {
-        if (!req.user) {
-            return next(new HttpException(404, 'Not logged in Admin user'));
-        }
-
-        res.status(200).json({ user: req.user });
-    };
     private register = async (
         req: Request,
         res: Response,

@@ -5,6 +5,7 @@ import PostModel from '@/resources/post/post.model';
 import App from '../app';
 import PostController from '@/resources/post/post.controller';
 import UserController from '@/resources/user/user.controller';
+import mongoose from 'mongoose';
 
 import dotenv from 'dotenv';
 import path from 'path';
@@ -39,6 +40,9 @@ describe('Post Tests', () => {
         await post.deleteMany();
         await post.deleteMany();
     });
+
+    // Close open db connection
+    afterAll(() => mongoose.disconnect());
 
     test(
         'Unauthenticated HTTP POST a new Post message: ' + `${postsPrefixURL}`,

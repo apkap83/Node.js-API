@@ -8,7 +8,7 @@
         "dev": "ENVIRONMENT=test tsc-watch --onSuccess \"node ./dist/index.js\"",
         "build": "tsc",
         "postinstall": "npm run build",
-        "test": "ENVIRONMENT=test jest --watch --runInBand --detectOpenHandles --coverage=false",
+        "test": "ENVIRONMENT=test jest --runInBand --detectOpenHandles --coverage=false",
         "clear_jest_cache": "jest --clearCache"
     },
     "type": "commonjs",
